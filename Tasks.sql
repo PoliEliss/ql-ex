@@ -34,3 +34,24 @@ WHERE Product.type ='PC'
 EXCEPT
 SELECT DISTINCT Product.maker from Product
 WHERE Product.type ='Laptop'
+
+Задание 14.
+Найдите класс, имя и страну для кораблей из таблицы Ships, имеющих не менее 10 орудий.
+
+SELECT Ships.class,Ships.name, Classes.country  FROM Classes 
+INNER JOIN Ships on Classes.class = Ships.class
+WHERE  Classes.numGuns >= 10
+
+Задание 15.
+Найдите размеры жестких дисков, совпадающих у двух и более PC. Вывести: HD
+
+SELECT  PC.hd    FROM PC
+GROUP BY PC.hd
+HAVING COUNT(PC.hd) >=2
+
+Задание: 16 
+Найдите пары моделей PC, имеющих одинаковые скорость и RAM. В результате каждая пара указывается только один раз, т.е. (i,j), 
+но не (j,i), Порядок вывода: модель с большим номером, модель с меньшим номером, скорость и RAM.
+
+SELECT DISTINCT result1.model, result2.model, result1.speed, result1.ram  FROM PC AS result1, PC AS result2
+WHERE result1.speed = result2.speed AND result1.ram = result2.ram AND result1.model <> result2.model AND result1.model > result2.model
