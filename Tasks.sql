@@ -55,3 +55,44 @@ HAVING COUNT(PC.hd) >=2
 
 SELECT DISTINCT result1.model, result2.model, result1.speed, result1.ram  FROM PC AS result1, PC AS result2
 WHERE result1.speed = result2.speed AND result1.ram = result2.ram AND result1.model <> result2.model AND result1.model > result2.model
+
+Задание 17
+Найдите модели ПК-блокнотов, скорость которых меньше скорости каждого из ПК.
+Вывести: type, model, speed
+
+SELECT DISTINCT Product.type, Laptop.model, Laptop.speed
+FROM Product
+
+INNER JOIN Laptop on Product.model = Laptop.model
+WHERE speed < ALL (SELECT speed
+ FROM PC
+ )
+Задание 18
+Найдите производителей самых дешевых цветных принтеров. Вывести: maker, price
+
+SELECT DISTINCT maker, price
+FROM Printer INNER JOIN Product
+ON Printer.model = Product.model
+WHERE Printer.color ='y' and Printer.price = (SELECT MIN(price)
+FROM printer WHERE color = 'y')
+
+
+Задание 20
+Найдите производителей, выпускающих по меньшей мере три различных модели ПК. Вывести: Maker, число моделей ПК.
+
+SELECT Product.maker, COUNT(Product.model) from Product
+WHERE Product.type ='PC'
+GROUP BY Product.maker
+HAVING COUNT(Product.model) >=3
+
+Задание 23
+
+Найдите производителей, которые производили бы как ПК
+со скоростью не менее 750 МГц, так и ПК-блокноты со скоростью не менее 750 МГц.
+Вывести: Maker
+
+SELECT DISTINCT Product.Maker FROM Product
+INNER JOIN PC on Product.model = PC.model
+WHERE PC.speed >= 750 AND Maker IN (SELECT DISTINCT Product.Maker from Product
+INNER JOIN Laptop on Product.model = Laptop.model
+WHERE Laptop.speed >=750)
