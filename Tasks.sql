@@ -96,3 +96,127 @@ INNER JOIN PC on Product.model = PC.model
 WHERE PC.speed >= 750 AND Maker IN (SELECT DISTINCT Product.Maker from Product
 INNER JOIN Laptop on Product.model = Laptop.model
 WHERE Laptop.speed >=750)
+
+Задание 24
+Перечислите номера моделей любых типов, имеющих самую высокую цену по всей имеющейся в базе данных продукции.
+
+select model from (
+
+select PC.model,PC.price,'PC' as type from PC
+UNION
+select Laptop.model,Laptop.price,'Laptop' as type from Laptop
+UNION
+select Printer.model,Printer.price,'Printer' as type from Printer) as fullCatalog
+
+where fullCatalog.price = (
+select MAX(price) from (
+select PC.model,PC.price,'PC' as type from PC
+UNION
+select Laptop.model,Laptop.price,'Laptop' as type from Laptop
+UNION
+select Printer.model,Printer.price,'Printer' as type from Printer
+) as max_price
+)
+
+Задание 25
+Найдите производителей принтеров, которые производят ПК с наименьшим объемом RAM и с самым быстрым процессором среди всех ПК,
+ имеющих наименьший объем RAM. Вывести: Maker
+SELECT DISTINCT maker
+FROM Product
+WHERE model IN (
+    SELECT model FROM PC
+    WHERE ram = (
+      SELECT MIN(ram)
+      FROM PC
+     )
+AND speed = (
+            SELECT MAX(speed)
+           FROM PC WHERE ram = (
+         SELECT MIN(ram)
+       FROM PC
+                         )
+            )
+              )
+AND
+maker IN (
+SELECT maker
+FROM Product
+WHERE type='printer'
+         )
+
+Задание 26
+Найдите среднюю цену ПК и ПК-блокнотов, выпущенных производителем A (латинская буква). Вывести: одна общая средняя цена.
+
+SELECT AVG(result.price) FROM (SELECT PC.code, PC.price,Product.maker, Product.model,Product.type  from PC
+ JOIN Product ON (PC.model = Product.model and Product.type='PC' )
+WHERE Product.maker = 'A'
+UNION 
+SELECT Laptop.code, Laptop.price,Product.maker,Product.model, Product.type  FROM Laptop
+ JOIN Product ON (Laptop.model = Product.model and Product.type='Laptop' )
+WHERE Product.maker = 'A') AS result
+
+
+Задание 27
+Найдите средний размер диска ПК каждого из тех производителей, которые выпускают и принтеры. Вывести: maker, средний размер HD.
+SELECT Product.maker, AVG(PC.hd) FROM PC
+JOIN Product ON PC.model = Product.model AND Product.type = 'PC'
+WHERE Product.maker IN ( SELECT DISTINCT maker FROM Product where Product.type = 'Printer')
+GROUP BY Product.maker
+
+Задание 28
+Используя таблицу Product, определить количество производителей, выпускающих по одной модели.
+SELECT COUNT(*) FROM (
+SELECT Product.maker, COUNT(model) AS countModel FROM Product
+GROUP BY Product.maker
+HAVING COUNT(model)=1  
+) AS result2
+
+Задание 34
+По Вашингтонскому международному договору от начала 1922 г. запрещалось строить линейные корабли водоизмещением более 35 тыс.тонн. 
+Укажите корабли, нарушившие этот договор (учитывать только корабли c известным годом спуска на воду). 
+Вывести названия кораблей.
+
+SELECT DISTINCT Ships.name from Classes, Ships
+WHERE Ships.launched >=1922 and Classes.type='bb' AND Classes.displacement > 35000 AND Ships.class = Classes.class
+
+Задание 35
+В таблице Product найти модели, которые состоят только из цифр или только из латинских букв (A-Z, без учета регистра).
+Вывод: номер модели, тип модели.
+
+SELECT model,type FROM Product
+WHERE Product.model NOT like '%[^A-Za-z]%' OR Product.model NOT like '%[^0-9]%'
+
+Задание 36
+Перечислите названия головных кораблей, имеющихся в базе данных (учесть корабли в Outcomes).
+SELECT  Classes.class FROM Classes
+INNER JOIN Outcomes ON Classes.class = Outcomes.ship
+UNION
+SELECT Classes.class FROM Classes
+INNER JOIN Ships on Classes.class = Ships.name
+GROUP BY Classes.class
+
+Задание 37
+Найдите классы, в которые входит только один корабль из базы данных (учесть также корабли в Outcomes).
+SELECT  result.class AS count_result  FROM (SELECT Classes.class, Ships.name   FROM Classes
+INNER JOIN Ships ON Classes.class = Ships.class
+UNION
+SELECT Classes.class, Outcomes.ship  FROM Outcomes, Classes
+WHERE Outcomes.ship  = Classes.class) AS result
+GROUP BY result.class
+HAVING COUNt(result.name) = 1
+
+Задание 40
+Найти производителей, которые выпускают более одной модели, при этом все выпускаемые производителем модели являются продуктами одного типа.
+Вывести: maker, type
+SELECT Product.maker, Product.type FROM (SELECT  result.maker FROM
+  (SELECT Product.maker, Product.type, COUNT(Product.type) AS typeCount FROM Product
+GROUP BY Product.maker, Product.type) AS result
+GROUP BY result.maker
+HAVING COUNT(result.maker) = 1) AS makers
+INNER JOIN Product ON makers.maker = Product.maker
+GROUP BY Product.maker, Product.type
+HAVING COUNT(Product.model) >1
+
+
+
+
