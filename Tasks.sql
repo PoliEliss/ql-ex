@@ -22,6 +22,13 @@ GROUP BY Product.maker
 SELECT model,ram,screen FROM Laptop
 WHERE Laptop.price > 1000
 
+Задание 4
+Найдите все записи таблицы Printer для цветных принтеров.
+
+SELECT * FROM Printer
+WHERE Printer.color = 'y'
+
+
 
 Задание 6
 Для каждого производителя, выпускающего ПК-блокноты c объёмом жесткого диска не менее 10 Гбайт, найти скорости таких ПК-блокнотов. Вывод: производитель, скорость.
