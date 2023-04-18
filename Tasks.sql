@@ -4,6 +4,21 @@
 SELECT PC.model, PC.speed, PC.hd FROM PC
 WHERE PC.price < 500
 
+Задание2
+Найдите производителей принтеров. Вывести: maker
+SELECT DISTINCT Product.maker  FROM Product
+WHERE type = 'Printer'
+
+-- или можно использовать GROUP BY maker--
+
+SELECT Product.maker  FROM Product
+WHERE type = 'Printer'
+GROUP BY Product.maker
+
+
+
+
+
 Задание 6
 Для каждого производителя, выпускающего ПК-блокноты c объёмом жесткого диска не менее 10 Гбайт, найти скорости таких ПК-блокнотов. Вывод: производитель, скорость.
 
