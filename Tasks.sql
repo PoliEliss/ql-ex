@@ -16,7 +16,11 @@ WHERE type = 'Printer'
 GROUP BY Product.maker
 
 
+Задание 3
+Найдите номер модели, объем памяти и размеры экранов ПК-блокнотов, цена которых превышает 1000 дол.
 
+SELECT model,ram,screen FROM Laptop
+WHERE Laptop.price > 1000
 
 
 Задание 6
