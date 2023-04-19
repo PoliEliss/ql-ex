@@ -71,6 +71,19 @@ EXCEPT
 SELECT DISTINCT Product.maker from Product
 WHERE Product.type ='Laptop'
 
+Задание 9
+Найдите производителей ПК с процессором не менее 450 Мгц. Вывести: Maker
+
+SELECT Maker FROM Product
+INNER JOIN PC ON PC.model = Product.model
+WHERE PC.speed >= 450
+GROUP BY Maker
+
+
+Задание 11.
+Найдите среднюю скорость ПК
+
+SELECT AVG(PC.speed) as avg_speed_pc FROM PC
 Задание 14.
 Найдите класс, имя и страну для кораблей из таблицы Ships, имеющих не менее 10 орудий.
 
