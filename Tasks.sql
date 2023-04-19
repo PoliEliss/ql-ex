@@ -152,6 +152,17 @@ WHERE Product.type ='PC'
 GROUP BY Product.maker
 HAVING COUNT(Product.model) >=3
 
+
+Задание 21
+
+Найдите максимальную цену ПК, выпускаемых каждым производителем, у которого есть модели в таблице PC.
+Вывести: maker, максимальная цена.
+
+SELECT Product.maker, MAX(PC.price) FROM Product
+INNER JOIN PC ON PC.model = Product.model
+GROUP BY Product.maker
+
+
 Задание 23
 
 Найдите производителей, которые производили бы как ПК
