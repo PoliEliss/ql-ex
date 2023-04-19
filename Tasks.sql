@@ -93,6 +93,15 @@ WHERE price = ( SELECT MAX(price) FROM Printer)
 Найдите среднюю скорость ПК-блокнотов, цена которых превышает 1000 дол.
 SELECT AVG(PC.speed) as avg_speed_pc FROM PC
 
+Задание 13
+Найдите среднюю скорость ПК, выпущенных производителем A.
+
+SELECT AVG(PC.speed) as avg_spee FROM Product
+INNER JOIN PC ON PC.model = Product.model
+WHERE Product.maker = 'A'
+
+
+
 Задание 14.
 Найдите класс, имя и страну для кораблей из таблицы Ships, имеющих не менее 10 орудий.
 
