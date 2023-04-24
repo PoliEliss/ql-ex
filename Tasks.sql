@@ -249,6 +249,25 @@ GROUP BY Product.maker
 HAVING COUNT(model)=1  
 ) AS result2
 
+Задание 29
+В предположении, что приход и расход денег на каждом пункте приема фиксируется не чаще одного раза в день [т.е. первичный ключ (пункт, дата)],  
+ написать запрос с выходными данными (пункт, дата, приход, расход). Использовать таблицы Income_o и Outcome_o.  
+
+SELECT COALESCE(Income_o.point, Outcome_o.point) as point, COALESCE(Income_o.[date], Outcome_o.[date]) as [date], inc, out 
+FROM Income_o
+FULL JOIN Outcome_o ON Income_o.point = Outcome_o.point 
+AND Income_o.[date] = Outcome_o.[date]
+  
+--OR --
+
+SELECT Income_o.point, Income_o.[date], inc, out FROM Income_o
+LEFT JOIN Outcome_o ON Income_o.point = Outcome_o.point 
+AND Income_o.[date] = Outcome_o.[date]
+UNION
+SELECT Outcome_o.point, Outcome_o.[date], inc, out FROM Outcome_o
+LEFT JOIN Income_o ON Outcome_o.point = Income_o.point 
+AND Income_o.[date] = Outcome_o.[date]
+
 Задание 31
 Для классов кораблей, калибр орудий которых не менее 16 дюймов, укажите класс и страну.
 SELECT class, country FROM Classes
